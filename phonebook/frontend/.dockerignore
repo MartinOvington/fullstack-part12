@@ -1,0 +1,7 @@
+.dockerignore
+.gitignore
+node_modules
+Dockerfile
+.eslintignore
+.eslintrc
+dev.Dockerfile
