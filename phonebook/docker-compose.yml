@@ -1,0 +1,32 @@
+services:
+  app:
+    tty: true # docker run -t
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:3001
+    image: phonebook-front
+    build:
+      context: ./frontend/ # The context will pick this directory as the "build context"
+      dockerfile: Dockerfile # This will simply tell which dockerfile to read
+    container_name: phonebook-front # This will name the container
+    depends_on:
+      - backend
+  backend:
+    image: phonebook-back
+    build:
+      context: ./backend/ # The context will pick this directory as the "build context"
+      dockerfile: Dockerfile # This will simply tell which dockerfile to read
+    volumes:
+      - ./backend/:/usr/src/app # The path can be relative, so ./ is enough to say "the same location as the docker-compose.yml"
+    ports:
+      - 3001:3001
+    container_name: phonebook-back # This will name the container
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - app # wait for the frontend container to be started
+      - backend

@@ -3,13 +3,11 @@ FROM node:16 AS build-stage
 
 WORKDIR /usr/src/app
 
-ENV REACT_APP_BACKEND_URL=http://localhost:3001 \
-    CI=true
-
 COPY . .
 
-# npm ci breaks, could not fix
-RUN npm install
+RUN npm ci
+
+ENV REACT_APP_BACKEND_URL=http://localhost:3001/api/persons
 
 RUN npm run build
 
